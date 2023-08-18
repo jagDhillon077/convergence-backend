@@ -2,8 +2,8 @@ import { createToken } from '../util/jwt.js';
 import User from "../models/User.js"
 
 const credentialsController = {
-    login() {
-      return async (req, res) => {
+    authenticate() {
+      return async (req, res, next) => {
         try {
             const { username, password } = req.body;
 
@@ -20,10 +20,7 @@ const credentialsController = {
             );
             if (user) {
               // success
-              const id_token = createToken({ user_id: user.password });
-              res.status(200).json({
-                id_token, 
-                user_data: user });
+              next()
             } else {
               // Authentication failed
               res.status(401).json({ message: 'Invalid username or password' });
